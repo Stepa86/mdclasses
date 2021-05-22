@@ -5,10 +5,10 @@ plugins {
     java
     maven
     jacoco
-    id("com.github.hierynomus.license") version "0.15.0"
+    id("net.kyori.indra.license-header") version "1.3.1"
     id("com.github.gradle-git-version-calculator") version "1.1.0"
-    id("io.franzbecker.gradle-lombok") version "3.1.0"
-    id("org.sonarqube") version "2.7.1"
+    id("io.franzbecker.gradle-lombok") version "4.0.0"
+    id("org.sonarqube") version "3.2.0"
 }
 
 group = "com.github.1c-syntax"
@@ -37,13 +37,20 @@ dependencies {
     implementation("commons-io", "commons-io", "2.8.0")
     implementation("org.apache.commons", "commons-lang3", "3.11")
     implementation("com.github.1c-syntax", "utils", "0.2.1")
-    // генерики
-    compileOnly("org.projectlombok", "lombok", lombok.version)
+
+    // быстрый поиск классов
+    implementation("org.atteo.classindex", "classindex", "3.10")
+    annotationProcessor("org.atteo.classindex", "classindex", "3.10")
+
     // тестирование
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
     testImplementation("org.assertj", "assertj-core", "3.18.1")
     testImplementation("com.ginsberg", "junit5-system-exit", "1.0.0")
+
+    // логирование
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    testImplementation("org.slf4j", "slf4j-log4j12", "1.7.30")
 }
 
 configure<JavaPluginConvention> {
@@ -102,29 +109,21 @@ sonarqube {
     }
 }
 
-lombok {
-    version = "1.18.16"
-    sha256 = "7206cbbfd6efd5e85bceff29545633645650be58d58910a23b0d4835fbd15ed7"
-}
-
 license {
     header = rootProject.file("license/HEADER.txt")
     ext["year"] = "2019 - " + Calendar.getInstance().get(Calendar.YEAR)
     ext["name"] = "Tymko Oleg <olegtymko@yandex.ru>, Maximov Valery <maximovvalery@gmail.com>"
     ext["project"] = "MDClasses"
-    strictCheck = true
-    mapping("java", "SLASHSTAR_STYLE")
-    excludes(listOf(
-            "**/edt*/**",
-            "**/origin*/**",
-            "**/*.bin",
-            "**/*.html",
-            "**/*.properties",
-            "**/*.xml",
-            "**/*.json",
-            "**/*.os",
-            "**/*.bsl",
-            "**/*.orig"))
+    exclude("**/edt*/**")
+    exclude("**/origin*/**")
+    exclude("**/*.bin")
+    exclude("**/*.html")
+    exclude("**/*.properties")
+    exclude("**/*.xml")
+    exclude("**/*.json")
+    exclude("**/*.os")
+    exclude("**/*.bsl")
+    exclude("**/*.orig")
 }
 
 tasks.register("precommit") {
