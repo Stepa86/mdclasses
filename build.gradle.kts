@@ -8,7 +8,7 @@ plugins {
     id("net.kyori.indra.license-header") version "1.3.1"
     id("com.github.gradle-git-version-calculator") version "1.1.0"
     id("io.franzbecker.gradle-lombok") version "4.0.0"
-    id("org.sonarqube") version "3.2.0"
+    id("org.sonarqube") version "3.4.0.2513"
 }
 
 group = "com.github.1c-syntax"
